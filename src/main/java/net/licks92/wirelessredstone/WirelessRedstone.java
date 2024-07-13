@@ -79,58 +79,65 @@ public class WirelessRedstone extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
-        if (!Utils.isCompatible()) {
-            WRLogger.severe("**********");
-            WRLogger.severe("This plugin isn't compatible with this Minecraft version! Please check the bukkit/spigot page.");
-            WRLogger.severe("**********");
-            getPluginLoader().disablePlugin(this);
-        }
-
-        new MaterialLib(this).initialize();
-
+    
+        // Get the existing ConfigManager instance
         config = ConfigManager.getConfig();
-        config.update(CHANNEL_FOLDER);
+    
+        // Initialize the logger with the loaded configuration
         WRLogger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), config.getDebugMode(), config.getColorLogging());
-        stringManager = new StringManager(config.getLanguage());
-
-        storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
-
-        if (!storageManager.getStorage().initStorage()) {
+        WRLogger.info("WirelessRedstone plugin is starting...");
+    
+        // Perform the compatibility check and log the server version
+        if (!Utils.isCompatible()) {
+            String detectedVersion = Utils.getBukkitVersion();
+            WRLogger.severe("This plugin isn't compatible with this Minecraft version! Detected version: " + detectedVersion + ", expected version: 1.21 or higher.");
             getPluginLoader().disablePlugin(this);
-            return;
+            return; // Exit if not compatible
         }
-
-        storageLoaded = true;
-
+    
+        // Check that the configuration is loaded
+        getLogger().info("Configuration loaded successfully.");
+    
+        // Initialize other components
+        stringManager = new StringManager(config.getLanguage());
+        storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
         signManager = new SignManager();
         commandManager = new CommandManager();
         adminCommandManager = new AdminCommandManager();
-
+    
+        // Initialize MaterialLib
+        new MaterialLib(this).initialize();
+    
+        // Register events
         PluginManager pm = getServer().getPluginManager();
         pm.registerEvents(new WorldListener(), this);
         pm.registerEvents(new BlockListener(), this);
         pm.registerEvents(new PlayerListener(), this);
-
+    
+        // Register commands
         getCommand("wirelessredstone").setExecutor(commandManager);
         getCommand("wr").setExecutor(commandManager);
         getCommand("wredstone").setExecutor(commandManager);
         getCommand("wifi").setExecutor(commandManager);
-
+    
+        // Register tab completers
         getCommand("wirelessredstone").setTabCompleter(commandManager);
         getCommand("wr").setTabCompleter(commandManager);
         getCommand("wredstone").setTabCompleter(commandManager);
         getCommand("wifi").setTabCompleter(commandManager);
-
+    
+        // Register admin commands
         getCommand("wradmin").setExecutor(adminCommandManager);
         getCommand("wra").setExecutor(adminCommandManager);
-
+    
+        // Register admin tab completers
         getCommand("wradmin").setTabCompleter(adminCommandManager);
         getCommand("wra").setTabCompleter(adminCommandManager);
-
+    
+        // Check for WorldEdit and register hook
         if (pm.isPluginEnabled("WorldEdit")) {
             InternalProvider.getCompatWorldEditHooker().register();
-            WirelessRedstone.getWRLogger().debug("Hooked into WorldEdit");
+            WRLogger.debug("Hooked into WorldEdit");
         }
     }
 
