@@ -9,8 +9,6 @@ Enjoy!
 ## WirelessRedstone
 Welcome on the official page of the Wireless Redstone plugin. [Spigot page.](https://www.spigotmc.org/resources/wirelessredstone.8251/)
 
-This repository contains a fork which will not be actively maintained. I'm not delivering support on this plugin.
-
 ### Changes
 - Changed native API version to Spigot 1.21.1
 - Fixed Version check to recognize Paper 1.21-57-0e02aa5 (MC: 1.21) as a valid build.
