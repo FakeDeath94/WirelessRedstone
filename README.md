@@ -13,6 +13,11 @@ Welcome on the official page of the Wireless Redstone plugin. [Spigot page.](htt
 - Changed native API version to Spigot 1.21.1
 - Fixed Version check to recognize Paper 1.21-57-0e02aa5 (MC: 1.21) as a valid build.
 
+## Known Issues
+- Performance issues on windows machines, when server first starts and you interact with a sign the server will hang for couple of seconds. It only does it once.
+- Signs don't turn off when plugged into redstone wire, the workaround for this is to use redstone torches in-between the signs and redstone wires as in video below.
+<iframe width="560" height="315" src="https://www.youtube.com/embed/JjNZ3o7n2sw?si=uI1sWs3XTEueo5gN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
 ## Maven
 Maven >3.5.0 is required to build this plugin due to the revision tag.
 [https://stackoverflow.com/questions/10582054/maven-project-version-inheritance-do-i-have-to-specify-the-parent-version/51969067#51969067](https://stackoverflow.com/questions/10582054/maven-project-version-inheritance-do-i-have-to-specify-the-parent-version/51969067#51969067)
