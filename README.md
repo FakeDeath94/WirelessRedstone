@@ -16,7 +16,11 @@ Welcome on the official page of the Wireless Redstone plugin. [Spigot page.](htt
 ## Known Issues
 - Performance issues on windows machines, when server first starts and you interact with a sign the server will hang for couple of seconds. It only does it once.
 - Signs don't turn off when plugged into redstone wire, the workaround for this is to use redstone torches in-between the signs and redstone wires as in video below.
-<iframe width="560" height="315" src="https://www.youtube.com/embed/JjNZ3o7n2sw?si=uI1sWs3XTEueo5gN" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>
+
+
+
+https://github.com/user-attachments/assets/e02e8f2a-2ae8-440c-9231-3e49f4e1f080
+
 
 ## Maven
 Maven >3.5.0 is required to build this plugin due to the revision tag.
