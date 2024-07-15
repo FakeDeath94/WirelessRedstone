@@ -117,40 +117,29 @@ public class WirelessChannel implements ConfigurationSerializable {
             WirelessRedstone.getWRLogger().debug("Channel " + name + " didn't turn off because locked.");
             return;
         }
-
+    
         if (!active) {
             return;
         }
-
-        boolean canTurnOff = true;
-        if (ConfigManager.getConfig().useORLogic() && !force) {
-            for (WirelessTransmitter transmitter : getTransmitters()) {
-                if (loc != null) {
-                    if (Utils.sameLocation(loc, transmitter.getLocation())) {
-                        continue;
-                    }
-                }
-
-                if (transmitter.isPowered()) {
-                    canTurnOff = false;
-                    break;
-                }
-            }
-        }
-
+    
+        // Determine if the channel can turn off based on the state of the transmitters
+        boolean canTurnOff = force || getTransmitters().stream()
+            .filter(transmitter -> loc == null || !Utils.sameLocation(loc, transmitter.getLocation()))
+            .noneMatch(WirelessTransmitter::isPowered);
+    
         WirelessRedstone.getWRLogger().debug("Channel#turnOff() WirelessChannel{" +
                 "name='" + name + '\'' +
                 ", active=" + active +
                 ", canTurnOff=" + canTurnOff +
                 "}");
-
+    
         if (!canTurnOff) {
-            active = true;
+            active = true; // The channel remains active if any transmitter is still powered.
             return;
         }
-
+    
+        // If all transmitters are off or force is true, turn off the channel.
         active = false;
-
         getReceivers().forEach(receiver -> receiver.turnOff(name));
         getScreens().forEach(WirelessScreen::turnOff);
     }

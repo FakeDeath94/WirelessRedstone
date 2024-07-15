@@ -8,10 +8,15 @@ import net.licks92.wirelessredstone.listeners.BlockListener;
 import net.licks92.wirelessredstone.listeners.PlayerListener;
 import net.licks92.wirelessredstone.listeners.WorldListener;
 import net.licks92.wirelessredstone.materiallib.MaterialLib;
+import net.licks92.wirelessredstone.signs.WirelessChannel;
+import net.licks92.wirelessredstone.storage.DatabaseClient;
 import net.licks92.wirelessredstone.storage.StorageConfiguration;
 import net.licks92.wirelessredstone.storage.StorageManager;
 import net.licks92.wirelessredstone.string.StringManager;
 import net.licks92.wirelessredstone.string.Strings;
+
+import java.util.Collection;
+
 import org.bukkit.plugin.PluginManager;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -79,14 +84,15 @@ public class WirelessRedstone extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-    
-        // Get the existing ConfigManager instance
         config = ConfigManager.getConfig();
+     // Initialize the logger first
+     WRLogger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), config.getDebugMode(), config.getColorLogging());
     
-        // Initialize the logger with the loaded configuration
-        WRLogger = new WRLogger("[WirelessRedstone]", getServer().getConsoleSender(), config.getDebugMode(), config.getColorLogging());
+     // Now that the logger is initialized, create the StorageManager
+     storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);   
+        // Get the existing ConfigManager instance
+        storageManager.updateChannels(false); // Synchronously load channels
         WRLogger.info("WirelessRedstone plugin is starting...");
-    
         // Perform the compatibility check and log the server version
         if (!Utils.isCompatible()) {
             String detectedVersion = Utils.getBukkitVersion();
@@ -94,13 +100,12 @@ public class WirelessRedstone extends JavaPlugin {
             getPluginLoader().disablePlugin(this);
             return; // Exit if not compatible
         }
-    
+        //DatabaseClient.init(CHANNEL_FOLDER);    
         // Check that the configuration is loaded
         getLogger().info("Configuration loaded successfully.");
     
         // Initialize other components
         stringManager = new StringManager(config.getLanguage());
-        storageManager = new StorageManager(config.getStorageType(), CHANNEL_FOLDER);
         signManager = new SignManager();
         commandManager = new CommandManager();
         adminCommandManager = new AdminCommandManager();

@@ -5,12 +5,14 @@ import org.bukkit.Location;
 import org.bukkit.block.BlockFace;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
+import net.licks92.wirelessredstone.WirelessRedstone; // Import statement for WirelessRedstone
 
 import java.util.HashMap;
 import java.util.Map;
 
 @SerializableAs("WirelessTransmitter")
 public class WirelessTransmitter extends WirelessPoint implements ConfigurationSerializable {
+    private String channelName; // Declare the channelName field
 
     public WirelessTransmitter(int x, int y, int z, String world, boolean isWallSign, BlockFace direction, String owner) {
         this.x = x;
@@ -41,6 +43,19 @@ public class WirelessTransmitter extends WirelessPoint implements ConfigurationS
         }
     }
 
+    public void updateChannelState() {
+        // Get the channel this transmitter is connected to
+        WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(this.channelName);
+        if (channel != null) {
+            if (this.isPowered()) {
+                channel.turnOn();
+            } else {
+                // Pass this transmitter's location to determine if it should affect the channel state
+                channel.turnOff(this.getLocation());
+            }
+        }
+    }
+        
     public boolean isPowered() {
         Location loc = getLocation();
         if (loc == null) {

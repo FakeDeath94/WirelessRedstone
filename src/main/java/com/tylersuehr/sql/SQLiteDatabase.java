@@ -262,7 +262,7 @@ public final class SQLiteDatabase extends SQLiteCloseable {
             Class.forName(DRIVER);
             this.connection = DriverManager.getConnection(PATH + dbName);
             this.connection.setAutoCommit(false);
-            this.statement = connection.createStatement();
+            this.statement = connection.createStatement(); // This line should initialize the statement
             acquireReference();
         } catch (ClassNotFoundException|SQLException ex) {
             logException(ex);

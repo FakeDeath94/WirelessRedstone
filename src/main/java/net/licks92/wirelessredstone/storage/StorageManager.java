@@ -72,10 +72,21 @@ public class StorageManager {
     }
 
     protected void updateList() {
+        if (WirelessRedstone.getWRLogger() != null) {
+            WirelessRedstone.getWRLogger().debug("Updating channel list...");
+        }
         allChannels.clear();
+        WirelessRedstone.getWRLogger().info("Clearing all channels before loading.");
         Collection<WirelessChannel> channels = getStorage().getAllChannels();
-
-        channels.forEach(channel -> allChannels.put(channel.getName(), channel));
+    
+        if (channels.isEmpty()) {
+            WirelessRedstone.getWRLogger().info("No channels were loaded from storage.");
+        } else {
+            channels.forEach(channel -> {
+                allChannels.put(channel.getName(), channel);
+                WirelessRedstone.getWRLogger().info("Loaded channel: " + channel.getName());
+            });
+        }
     }
 
     protected void updateList(String channelName, WirelessChannel channel) {

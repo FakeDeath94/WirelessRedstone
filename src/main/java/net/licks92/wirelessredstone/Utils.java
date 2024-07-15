@@ -22,21 +22,26 @@ public class Utils {
      * @return If the plugin is compatible
      */
     public static boolean isCompatible() {
-        String serverVersion = Bukkit.getVersion(); // This will include the version number.
+        String serverVersion = Bukkit.getBukkitVersion();
         Bukkit.getLogger().info("Detected server version: " + serverVersion);
-
+    
         // Extract the major and minor version numbers.
         String[] versionComponents = serverVersion.replaceAll("[^0-9.]", "").split("\\.");
         if (versionComponents.length >= 2) {
-            int major = Integer.parseInt(versionComponents[0]);
-            int minor = Integer.parseInt(versionComponents[1]);
-
-            // Check if the major version is 1 and minor version is 21 or higher.
-            boolean isCompatible = major == 1 && minor >= 21;
-            Bukkit.getLogger().info("Is the server compatible? " + isCompatible);
-            return isCompatible;
+            try {
+                int major = Integer.parseInt(versionComponents[0]);
+                int minor = Integer.parseInt(versionComponents[1]);
+    
+                // Check if the major version is 1 and minor version is 21 or higher.
+                boolean isCompatible = major == 1 && minor >= 21;
+                Bukkit.getLogger().info("Is the server compatible? " + isCompatible);
+                return isCompatible;
+            } catch (NumberFormatException e) {
+                Bukkit.getLogger().severe("Failed to parse server version: " + serverVersion);
+                Bukkit.getLogger().severe("NumberFormatException: " + e.getMessage());
+            }
         }
-
+    
         // Log a warning if the version doesn't match the expected format.
         Bukkit.getLogger().warning("Unexpected server version format: " + serverVersion);
         return false;

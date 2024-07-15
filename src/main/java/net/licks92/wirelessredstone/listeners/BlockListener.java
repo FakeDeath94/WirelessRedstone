@@ -45,6 +45,11 @@ public class BlockListener implements Listener {
                     skipLocation = true;
                 }
             }
+            
+            if (event.getNewCurrent() == 0) {
+                handleRedstoneEvent(event.getBlock(), false, skipLocation, false);
+            }
+            
 
             handleRedstoneEvent(event.getBlock(), event.getNewCurrent() > 0, skipLocation, false); // skipLocation: true
         } else {

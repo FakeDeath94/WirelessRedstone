@@ -71,7 +71,7 @@ public class ConfigManager {
         if (config == null)
             return;
 
-        config.options().copyHeader(true);
+        config.options().parseComments(true);
         config.options().copyDefaults(true);
     }
 
