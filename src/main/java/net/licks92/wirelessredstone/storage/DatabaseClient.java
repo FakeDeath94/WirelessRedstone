@@ -63,9 +63,10 @@ public class DatabaseClient extends SQLiteOpenHelper {
         return instance;
     }
 
-    public static synchronized DatabaseClient init(String channelFolder) {
+    protected static synchronized DatabaseClient init(String channelFolder) {
         if (instance == null) {
             Objects.requireNonNull(channelFolder, "Channel folder can't be null");
+
             instance = new DatabaseClient(channelFolder);
         }
         return instance;

@@ -5,6 +5,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.configuration.serialization.SerializableAs;
 
 import java.util.Map;
@@ -51,10 +52,10 @@ public class WirelessReceiverDelayer extends WirelessReceiver {
         }
 
         Sign sign = (Sign) block.getState();
-        sign.setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
-        sign.setLine(1, channelName);
-        sign.setLine(2, WirelessRedstone.getStringManager().tagsReceiverDelayerType.get(0));
-        sign.setLine(3, Integer.toString(delay));
+        sign.getSide(Side.FRONT).setLine(0, WirelessRedstone.getStringManager().tagsReceiver.get(0));
+        sign.getSide(Side.FRONT).setLine(1, channelName);
+        sign.getSide(Side.FRONT).setLine(2, WirelessRedstone.getStringManager().tagsReceiverDelayerType.get(0));
+        sign.getSide(Side.FRONT).setLine(3, Integer.toString(delay));
         sign.update();
     }
 

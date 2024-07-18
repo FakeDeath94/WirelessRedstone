@@ -13,6 +13,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -45,11 +46,6 @@ public class BlockListener implements Listener {
                     skipLocation = true;
                 }
             }
-            
-            if (event.getNewCurrent() == 0) {
-                handleRedstoneEvent(event.getBlock(), false, skipLocation, false);
-            }
-            
 
             handleRedstoneEvent(event.getBlock(), event.getNewCurrent() > 0, skipLocation, false); // skipLocation: true
         } else {
@@ -171,7 +167,7 @@ public class BlockListener implements Listener {
             int result = WirelessRedstone.getSignManager().registerSign(
                     channelName,
                     event.getBlock(),
-                    Utils.getSignType(sign.getLine(0), sign.getLine(2)),
+                    Utils.getSignType(sign.getSide(Side.FRONT).getLine(0), sign.getSide(Side.FRONT).getLine(2)),
                     signDirection,
                     Collections.singletonList(event.getPlayer().getUniqueId().toString()),
                     finalDelay
@@ -212,7 +208,7 @@ public class BlockListener implements Listener {
         if (event.getBlock().getState() instanceof Sign) {
             Sign sign = (Sign) event.getBlock().getState();
 
-            SignType signType = Utils.getSignType(sign.getLine(0));
+            SignType signType = Utils.getSignType(sign.getSide(Side.FRONT).getLine(0));
             if (signType == null) {
                 return;
             }
@@ -239,7 +235,7 @@ public class BlockListener implements Listener {
                 return;
             }
 
-            String channelName = sign.getLine(1);
+            String channelName = sign.getSide(Side.FRONT).getLine(1);
 
             if (!WirelessRedstone.getSignManager().hasAccessToChannel(event.getPlayer(), channelName)) {
                 Utils.sendFeedback(WirelessRedstone.getStrings().permissionDestroySign, event.getPlayer(), true, true);
@@ -340,13 +336,13 @@ public class BlockListener implements Listener {
             WirelessRedstone.getWRLogger().debug("Redstone power update (" + powered + "): " + sign.getLocation());
         }
 
-        if (Utils.getSignType(sign.getLine(0)) != SignType.TRANSMITTER)
+        if (Utils.getSignType(sign.getSide(Side.FRONT).getLine(0)) != SignType.TRANSMITTER)
             return;
 
-        if (sign.getLine(1).equalsIgnoreCase(""))
+        if (sign.getSide(Side.FRONT).getLine(1).equalsIgnoreCase(""))
             return;
 
-        WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(sign.getLine(1));
+        WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(sign.getSide(Side.FRONT).getLine(1));
         if (channel == null) {
             return;
         }

@@ -11,46 +11,8 @@ import java.util.Arrays;
 import java.util.Collection;
 
 public class Utils {
-
     private static final BlockFace[] axis = {BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST};
     private static final BlockFace[] fullAxis = {BlockFace.SOUTH, BlockFace.WEST, BlockFace.NORTH, BlockFace.EAST, BlockFace.UP, BlockFace.DOWN};
-
-
-    /**
-     * This checks if the current Minecraft server version is compatible with WirelessRedstone.
-     *
-     * @return If the plugin is compatible
-     */
-    public static boolean isCompatible() {
-        String serverVersion = Bukkit.getBukkitVersion();
-        Bukkit.getLogger().info("Detected server version: " + serverVersion);
-    
-        // Extract the major and minor version numbers.
-        String[] versionComponents = serverVersion.replaceAll("[^0-9.]", "").split("\\.");
-        if (versionComponents.length >= 2) {
-            try {
-                int major = Integer.parseInt(versionComponents[0]);
-                int minor = Integer.parseInt(versionComponents[1]);
-    
-                // Check if the major version is 1 and minor version is 21 or higher.
-                boolean isCompatible = major == 1 && minor >= 21;
-                Bukkit.getLogger().info("Is the server compatible? " + isCompatible);
-                return isCompatible;
-            } catch (NumberFormatException e) {
-                Bukkit.getLogger().severe("Failed to parse server version: " + serverVersion);
-                Bukkit.getLogger().severe("NumberFormatException: " + e.getMessage());
-            }
-        }
-    
-        // Log a warning if the version doesn't match the expected format.
-        Bukkit.getLogger().warning("Unexpected server version format: " + serverVersion);
-        return false;
-    }
-
-    public static String getBukkitVersion() {
-        final String packageName = Bukkit.getServer().getClass().getPackage().getName();
-        return packageName.substring(packageName.lastIndexOf('.') + 1);
-    }
 
     /**
      * This checks if the new material system is in place.

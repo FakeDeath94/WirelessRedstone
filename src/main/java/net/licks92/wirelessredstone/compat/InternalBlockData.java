@@ -6,6 +6,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.data.Directional;
+import org.bukkit.block.data.FaceAttachable;
 import org.bukkit.block.data.Powerable;
 import org.bukkit.block.data.Rotatable;
 import org.bukkit.block.data.type.RedstoneWallTorch;
@@ -64,23 +65,28 @@ public class InternalBlockData {
         return ((Directional) block.getBlockData()).getFacing();
     }
 
-    public BlockFace getRedstoneSwitchFacing(@NotNull Block block) {
-        Objects.requireNonNull(block, "Block cannot be NULL");
+public BlockFace getRedstoneSwitchFacing(@NotNull Block block) {
+    Objects.requireNonNull(block, "Block cannot be NULL");
 
-        if (!(block.getBlockData() instanceof Switch)) {
-            throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.type.Switch found " + block.getBlockData().getClass());
-        }
+    if (!(block.getBlockData() instanceof Switch)) {
+        throw new IllegalArgumentException("Block needs to be a org.bukkit.block.data.type.Switch found " + block.getBlockData().getClass());
+    }
 
-        Switch redstoneSwitch = (Switch) block.getBlockData();
+    Switch redstoneSwitch = (Switch) block.getBlockData();
 
-        if (redstoneSwitch.getFace() == Switch.Face.CEILING) {
-            return BlockFace.UP;
-        } else if (redstoneSwitch.getFace() == Switch.Face.FLOOR) {
-            return BlockFace.DOWN;
-        }
+    // Use FaceAttachable.getAttachedFace()
+    FaceAttachable.AttachedFace attachedFace = redstoneSwitch.getAttachedFace();
 
+    if (attachedFace == FaceAttachable.AttachedFace.CEILING) {
+        return BlockFace.UP;
+    } else if (attachedFace == FaceAttachable.AttachedFace.FLOOR) {
+        return BlockFace.DOWN;
+    } else {
+        // Handle other possible attached faces if needed 
+        // Fallback logic using getDirectionalFacing can stay the same
         return getDirectionalFacing(block).getOppositeFace();
     }
+}
 
     public void setRedstoneWallTorch(@NotNull Block block, @NotNull BlockFace blockFace, @Nullable BlockFace storedDirection) {
         Objects.requireNonNull(block, "Block cannot be NULL");

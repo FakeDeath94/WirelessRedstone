@@ -11,6 +11,7 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
@@ -36,7 +37,7 @@ public class PlayerListener implements Listener {
         }
 
         Sign sign = (Sign) event.getClickedBlock().getState();
-        SignType signType = Utils.getSignType(sign.getLine(0));
+        SignType signType = Utils.getSignType(sign.getSide(Side.FRONT).getLine(0));
         if (signType == null) {
             return;
         }
@@ -63,17 +64,17 @@ public class PlayerListener implements Listener {
             return;
         }
 
-        signType = Utils.getSignType(sign.getLine(0), sign.getLine(2));
+        signType = Utils.getSignType(sign.getSide(Side.FRONT).getLine(0), sign.getSide(Side.FRONT).getLine(2));
 
-        if (sign.getLine(1).equalsIgnoreCase("")) {
+        if (sign.getSide(Side.FRONT).getLine(1).equalsIgnoreCase("")) {
             handlePlaceCancelled(event.getClickedBlock());
             Utils.sendFeedback(WirelessRedstone.getStrings().noChannelName, event.getPlayer(), true);
             return;
         }
 
-        WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(sign.getLine(1));
+        WirelessChannel channel = WirelessRedstone.getStorageManager().getChannel(sign.getSide(Side.FRONT).getLine(1));
         if (channel != null) {
-            if (!WirelessRedstone.getSignManager().hasAccessToChannel(event.getPlayer(), sign.getLine(1))) {
+            if (!WirelessRedstone.getSignManager().hasAccessToChannel(event.getPlayer(), sign.getSide(Side.FRONT).getLine(1))) {
                 Utils.sendFeedback(WirelessRedstone.getStrings().permissionChannelAccess, event.getPlayer(), true);
                 handlePlaceCancelled(event.getClickedBlock());
                 return;
@@ -86,7 +87,7 @@ public class PlayerListener implements Listener {
 
         int delay = 0;
         try {
-            delay = Integer.parseInt(sign.getLine(3));
+            delay = Integer.parseInt(sign.getSide(Side.FRONT).getLine(3));
         } catch (NumberFormatException ignored) {
             if (signType == SignType.RECEIVER_DELAYER) {
                 handlePlaceCancelled(event.getClickedBlock());
@@ -102,9 +103,9 @@ public class PlayerListener implements Listener {
         BlockFace signDirection = InternalProvider.getCompatBlockData().getSignRotation(sign.getBlock());
 
         int result = WirelessRedstone.getSignManager().registerSign(
-                sign.getLine(1),
+                sign.getSide(Side.FRONT).getLine(1),
                 event.getClickedBlock(),
-                Utils.getSignType(sign.getLine(0), sign.getLine(2)),
+                Utils.getSignType(sign.getSide(Side.FRONT).getLine(0), sign.getSide(Side.FRONT).getLine(2)),
                 signDirection,
                 Collections.singletonList(event.getPlayer().getUniqueId().toString()),
                 delay

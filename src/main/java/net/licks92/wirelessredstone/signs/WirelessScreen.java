@@ -4,16 +4,12 @@ import net.licks92.wirelessredstone.Utils;
 import org.bukkit.ChatColor;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.type.WallSign;
-import org.bukkit.block.sign.SignSide;
+import org.bukkit.block.sign.Side;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
-import org.bukkit.block.data.type.Sign;
-import org.bukkit.Material;
-import org.bukkit.block.data.type.Sign.Side;
+
 import java.util.HashMap;
 import java.util.Map;
-import org.bukkit.entity.Player;
 
 @SerializableAs("WirelessScreen")
 public class WirelessScreen extends WirelessPoint implements ConfigurationSerializable {
@@ -65,25 +61,16 @@ public class WirelessScreen extends WirelessPoint implements ConfigurationSerial
             return;
         }
 
-        String str = isChannelOn ? ChatColor.GREEN + "ACTIVE" : ChatColor.RED + "INACTIVE";
+        String str;
+        if (isChannelOn)
+            str = ChatColor.GREEN + "ACTIVE";
+        else
+            str = ChatColor.RED + "INACTIVE";
 
-        Sign signState = (Sign) getLocation().getBlock().getState();
-        org.bukkit.block.data.type.Sign signData = (org.bukkit.block.data.type.Sign) signState.getBlockData();
-
-        // Check if the sign is attached to a wall or standing
-        if (signData instanceof WallSign) {
-            // Wall signs have only one side that can be written on
-            SignSide signSide = signState.getSide(Side.FRONT);
-            signSide.setLine(2, str);
-        } else {
-            // Standing signs can have multiple sides
-            SignSide frontSide = signState.getSide(Side.FRONT);
-            frontSide.setLine(2, str);
-        }
-
-        signState.update();
+        Sign sign = (Sign) getLocation().getBlock().getState();
+        sign.getSide(Side.FRONT).setLine(2, str);
+        sign.update();
     }
-
 
     @Override
     public Map<String, Object> serialize() {

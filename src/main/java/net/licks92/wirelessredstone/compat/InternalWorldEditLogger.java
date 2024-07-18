@@ -11,6 +11,7 @@ import com.sk89q.worldedit.world.block.BlockStateHolder;
 import net.licks92.wirelessredstone.WirelessRedstone;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
+import org.bukkit.block.sign.Side;
 
 public class InternalWorldEditLogger extends AbstractDelegateExtent {
 
@@ -38,7 +39,7 @@ public class InternalWorldEditLogger extends AbstractDelegateExtent {
         Block block = world.getBlockAt(position.x(), position.y(), position.z());
         if (WirelessRedstone.getSignManager().isWirelessRedstoneSign(block)) {
             Sign sign = (Sign) block.getState();
-            String channelName = sign.getLine(1);
+            String channelName = sign.getSide(Side.FRONT).getLine(1);
             WirelessRedstone.getSignManager().removeSign(channelName, block.getLocation());
             WirelessRedstone.getWRLogger().debug("Removed sign at " + block.getLocation() + " because it was edited by WorldEdit");
         }
