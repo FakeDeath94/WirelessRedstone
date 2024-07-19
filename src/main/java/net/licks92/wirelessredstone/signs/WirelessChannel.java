@@ -5,15 +5,14 @@ import net.licks92.wirelessredstone.Utils;
 import net.licks92.wirelessredstone.WirelessRedstone;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.List;
-import java.util.Map;
-import java.util.Objects;
+import java.io.IOException;
+import java.net.HttpURLConnection;
+import java.net.URL;
+import java.util.*;
 
 @SerializableAs("WirelessChannel")
 public class WirelessChannel implements ConfigurationSerializable {
@@ -55,20 +54,46 @@ public class WirelessChannel implements ConfigurationSerializable {
     }
 
     public WirelessChannel(Map<String, Object> map) {
-        this.setId((Integer) map.get("id"));
-        this.setName((String) map.get("name"));
+        this.id = getAsType(map.get("id"), Integer.class);
+        this.name = getAsType(map.get("name"), String.class);
         this.active = (Boolean) map.getOrDefault("active", false);
-        this.setOwners((List<String>) map.get("owners"));
-        this.setReceivers((List<WirelessReceiver>) map.get("receivers"));
-        this.setTransmitters((List<WirelessTransmitter>) map.get("transmitters"));
-        this.setScreens((List<WirelessScreen>) map.get("screens"));
-        try {
-            this.setLocked((Boolean) map.get("locked"));
-        } catch (NullPointerException ignored) {
-            this.setLocked(false);
-        }
+        this.owners = getAsTypeList(map.get("owners"), String.class);
+        this.receivers = getAsTypeList(map.get("receivers"), WirelessReceiver.class);
+        this.transmitters = getAsTypeList(map.get("transmitters"), WirelessTransmitter.class);
+        this.screens = getAsTypeList(map.get("screens"), WirelessScreen.class);
+        this.locked = getAsType(map.get("locked"), Boolean.class, false);
 
         convertOwnersToUuid();
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T getAsType(Object obj, Class<T> type) {
+        if (type.isInstance(obj)) {
+            return (T) obj;
+        }
+        throw new ClassCastException("Failed to cast to " + type.getSimpleName());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> T getAsType(Object obj, Class<T> type, T defaultValue) {
+        if (obj == null) {
+            return defaultValue;
+        }
+        if (type.isInstance(obj)) {
+            return (T) obj;
+        }
+        throw new ClassCastException("Failed to cast to " + type.getSimpleName());
+    }
+
+    @SuppressWarnings("unchecked")
+    private <T> List<T> getAsTypeList(Object obj, Class<T> type) {
+        if (obj instanceof List<?>) {
+            List<?> list = (List<?>) obj;
+            if (list.isEmpty() || type.isInstance(list.get(0))) {
+                return (List<T>) list;
+            }
+        }
+        throw new ClassCastException("Failed to cast to List<" + type.getSimpleName() + ">");
     }
 
     public void turnOn() {
@@ -195,22 +220,50 @@ public class WirelessChannel implements ConfigurationSerializable {
     }
 
     public void convertOwnersToUuid() {
-        Iterator<String> ownersIterator = owners.iterator();
-        while (ownersIterator.hasNext()) {
-            String owner = ownersIterator.next();
+        List<String> updatedOwners = new ArrayList<>();
+        for (String owner : owners) {
             if (!owner.contains("-")) {
-                if (Bukkit.getPlayer(owner) == null) {
-                    if (Bukkit.getOfflinePlayer(owner).hasPlayedBefore()) {
-                        owners.add(Bukkit.getOfflinePlayer(owner).getUniqueId().toString());
-                        owners.remove(owner);
-                    }
-                } else {
-                    owners.add(Objects.requireNonNull(Bukkit.getPlayer(owner)).getUniqueId().toString());
-                    owners.remove(owner);
+                UUID uuid = getUUIDFromName(owner);
+                if (uuid != null) {
+                    updatedOwners.add(uuid.toString());
                 }
+            } else {
+                updatedOwners.add(owner);
             }
         }
+        owners = updatedOwners;
     }
+
+private UUID getUUIDFromName(String name) {
+    HttpURLConnection connection = null;
+    try {
+        connection = (HttpURLConnection) new URL("https://api.mojang.com/users/profiles/minecraft/" + name).openConnection();
+        connection.setReadTimeout(5000);
+        connection.setConnectTimeout(5000);
+        connection.setRequestMethod("GET");
+        connection.setDoOutput(true);
+
+        try (Scanner scanner = new Scanner(connection.getInputStream())) {
+            if (scanner.hasNext()) {
+                String response = scanner.next();
+                String id = response.split("\"id\":\"")[1].split("\"")[0];
+                return UUID.fromString(
+                    id.replaceFirst(
+                        "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
+                        "$1-$2-$3-$4-$5"
+                    )
+                );
+            }
+        }
+    } catch (IOException e) {
+        e.printStackTrace();
+    } finally {
+        if (connection != null) {
+            connection.disconnect();
+        }
+    }
+    return null;
+}
 
     public int getId() {
         return id;
@@ -230,10 +283,6 @@ public class WirelessChannel implements ConfigurationSerializable {
 
     public boolean isLocked() {
         return locked;
-    }
-
-    public void setLocked(boolean locked) {
-        this.locked = locked;
     }
 
     public List<String> getOwners() {

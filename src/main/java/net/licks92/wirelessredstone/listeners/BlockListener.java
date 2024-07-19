@@ -36,19 +36,16 @@ public class BlockListener implements Listener {
     @EventHandler(priority = EventPriority.MONITOR)
     public void on(BlockRedstoneEvent event) {
         if (event.getBlock().getType() == Material.REDSTONE || event.getBlock().getType() == Material.REDSTONE_WIRE) {
-            if (event.getNewCurrent() < event.getOldCurrent() && event.getNewCurrent() != 0) {
-                return;
-            }
-
+            // If the new current is 0, it means the redstone power is completely off.
+            boolean isPowered = event.getNewCurrent() > 0;
             boolean skipLocation = false;
-            if (Utils.isNewMaterialSystem()) {
-                if (event.getOldCurrent() < 15) {
-                    skipLocation = true;
-                }
+        
+            if (Utils.isNewMaterialSystem() && event.getOldCurrent() < 15) {
+                skipLocation = true;
             }
-
-            handleRedstoneEvent(event.getBlock(), event.getNewCurrent() > 0, skipLocation, false); // skipLocation: true
-        } else {
+        
+            handleRedstoneEvent(event.getBlock(), isPowered, skipLocation, !isPowered);
+        }else {
             handleRedstoneEvent(event.getBlock(), event.getNewCurrent() > 0, false, event.getNewCurrent() == 0);
         }
     }
@@ -70,15 +67,8 @@ public class BlockListener implements Listener {
         if (!InternalProvider.getCompatBlockData().isPowerable(event.getBlock())) {
             return;
         }
-
-        // Testing for better performance
-//        if (event.getBlock().getType() == Material.REDSTONE || event.getBlock().getType() == Material.REDSTONE_WIRE) {
-//            return;
-//        }
-
         boolean isPowered = InternalProvider.getCompatBlockData().isPowered(event.getBlock());
 
-        // Testing to handle only dispowering or all events
         if (!isPowered) {
             handleRedstoneEvent(event.getBlock(), isPowered, false, false);
         }
@@ -256,7 +246,6 @@ public class BlockListener implements Listener {
         if (CrossMaterial.REPEATER.equals(type) || CrossMaterial.REPEATER_ON.equals(type) || CrossMaterial.REPEATER_OFF.equals(type) ||
                 CrossMaterial.COMPARATOR.equals(type) || CrossMaterial.COMPARATOR_ON.equals(type) || CrossMaterial.COMPARATOR_OFF.equals(type)) {
             if (Utils.isNewMaterialSystem()) {
-//                org.bukkit.block.data.Directional directional = (org.bukkit.block.data.Directional) block.getBlockData();
                 BlockFace direction = InternalProvider.getCompatBlockData().getDirectionalFacing(block);
 
                 if (block.getRelative(direction.getOppositeFace()).getType().isOccluding() &&
