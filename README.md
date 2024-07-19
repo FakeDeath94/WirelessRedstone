@@ -1,30 +1,30 @@
-### Status
-[![Build Status](https://travis-ci.org/WirelessRedstoneGroup/WirelessRedstone.svg?branch=master)](https://travis-ci.org/WirelessRedstoneGroup/WirelessRedstone)
+
 
 ## Why?
 
-Forking this since SBDPlugins's version didn't work for me on Paper 1.21, I will be updating this fork until further notice, unfortunately my Java skills aren't there so there might be bugs and issues. This version has been tested on Paper 1.21-57-0e02aa5 (MC: 1.21) and it "seems" to work just fine.
+Forking this since the original plugin is heavily outdated. I'm not very well versed in Java so if you see any issues or bad practices please reach out or open an issue!
 Enjoy!
 
 ## WirelessRedstone
-Welcome on the official page of the Wireless Redstone plugin. [Spigot page.](https://www.spigotmc.org/resources/wirelessredstone.8251/)
+The official page of the Wireless Redstone plugin. [Spigot page.](https://www.spigotmc.org/resources/wirelessredstone.8251/)
 
 ### Changes
 - Changed native API version to Spigot 1.21.1
 - Fixed Version check to recognize Paper 1.21-57-0e02aa5 (MC: 1.21) as a valid build.
+- Fixed most of the issues with Depreciated Bukkit API classes/functions.
+- Fixed Redstone Wire Not Working!
+
+
+https://github.com/user-attachments/assets/50ca65b9-068c-44e6-b891-351f51e6cbf4
+
 
 ## Known Issues
 - Performance issues on windows machines, when server first starts and you interact with a sign the server will hang for couple of seconds. It only does it once.
-- Signs don't turn off when plugged into redstone wire, the workaround for this is to use redstone torches in-between the signs and redstone wires as in video below.
+- ~~Signs don't turn off when plugged into redstone wire, the workaround for this is to use redstone torches in-between the signs and redstone wires as in video below.~~
 
-
-
-https://github.com/user-attachments/assets/e02e8f2a-2ae8-440c-9231-3e49f4e1f080
-
-
-## Maven
-Maven >3.5.0 is required to build this plugin due to the revision tag.
-[https://stackoverflow.com/questions/10582054/maven-project-version-inheritance-do-i-have-to-specify-the-parent-version/51969067#51969067](https://stackoverflow.com/questions/10582054/maven-project-version-inheritance-do-i-have-to-specify-the-parent-version/51969067#51969067)
+## ToDo
+- Add MySql Support (I know it isn't probably needed for a small plugin but it is nice to have the option)
+- Add Removal of all old channels (from database and yml files) when all signs are destroyed.
 
 ## Config
 
