@@ -45,7 +45,23 @@ https://github.com/user-attachments/assets/50ca65b9-068c-44e6-b891-351f51e6cbf4
 | CacheRefreshFrequency       | Frequency (in seconds) of refreshing the database. You should leave this to the default value.                                                                                                                                                                                                                                                               |
 | gateLogic                   | The logic of the transmitters;  OR: If one of the transmitters is powered the channel will be activated. All transmitters must be off to power the channel down.  IGNORE: If one of the transmitters is powered the channel will be activated. If a transmitter is no longer powered the channel will be deactivated ignoring other transmitters.            |
 | saveOption                  | Save WirelessRedstone data in YML or SQLITE.                                                                                                                                                                                                                                                                                                                 |
-
+| **Language**              | **Code**    |
+|:--------------------------|:------------|
+| **Czech**                 | `_cs_CZ`    |
+| **German**                | `_de`       |
+| **English**               | `_en`       |
+| **Spanish**               | `_es`       |
+| **French**                | `_fr`       |
+| **Italian**               | `_it`       |
+| **Japanese**              | `_ja_JP`    |
+| **Korean**                | `_ko_KR`    |
+| **Dutch**                 | `_nl`       |
+| **Polish**                | `_pl`       |
+| **Portuguese (Brazil)**   | `_pt_BR`    |
+| **Russian**               | `_ru`       |
+| **Turkish**               | `_tr`       |
+| **Chinese (Simplified)**  | `_zh_CN`    |
+| **Chinese (Traditional)** | `_zh_HK`    |
 ## License
 
 WirelessRedstone is released under the [GPLv3](LICENSE.txt).
