@@ -14,6 +14,7 @@ The official page of the Wireless Redstone plugin. [Spigot page.](https://www.sp
 - Fixed most of the issues with Depreciated Bukkit API classes/functions.
 - Fixed Redstone Wire Not Working!
 - Added missing MC Versions to fix server logs stating unknow server version
+- Added Polish Translation
 
 
 https://github.com/user-attachments/assets/169c6f80-e1b4-4f3f-9168-ff0cf0baeb88
@@ -46,22 +47,21 @@ https://github.com/user-attachments/assets/50ca65b9-068c-44e6-b891-351f51e6cbf4
 | gateLogic                   | The logic of the transmitters;  OR: If one of the transmitters is powered the channel will be activated. All transmitters must be off to power the channel down.  IGNORE: If one of the transmitters is powered the channel will be activated. If a transmitter is no longer powered the channel will be deactivated ignoring other transmitters.            |
 | saveOption                  | Save WirelessRedstone data in YML or SQLITE.                                                                                                                                                                                                                                                                                                                 |
 | **Language**              | **Code**    |
-|:--------------------------|:------------|
-| **Czech**                 | `_cs_CZ`    |
-| **German**                | `_de`       |
-| **English**               | `_en`       |
-| **Spanish**               | `_es`       |
-| **French**                | `_fr`       |
-| **Italian**               | `_it`       |
-| **Japanese**              | `_ja_JP`    |
-| **Korean**                | `_ko_KR`    |
-| **Dutch**                 | `_nl`       |
-| **Polish**                | `_pl`       |
-| **Portuguese (Brazil)**   | `_pt_BR`    |
-| **Russian**               | `_ru`       |
-| **Turkish**               | `_tr`       |
-| **Chinese (Simplified)**  | `_zh_CN`    |
-| **Chinese (Traditional)** | `_zh_HK`    |
+| **Czech**                 | `cs_CZ`    |
+| **German**                | `de`       |
+| **English**               | `en`       |
+| **Spanish**               | `es`       |
+| **French**                | `fr`       |
+| **Italian**               | `it`       |
+| **Japanese**              | `ja_JP`    |
+| **Korean**                | `ko_KR`    |
+| **Dutch**                 | `nl`       |
+| **Polish**                | `pl`       |
+| **Portuguese (Brazil)**   | `pt_BR`    |
+| **Russian**               | `ru`       |
+| **Turkish**               | `tr`       |
+| **Chinese (Simplified)**  | `zh_CN`    |
+| **Chinese (Traditional)** | `zh_HK`    |
 ## License
 
 WirelessRedstone is released under the [GPLv3](LICENSE.txt).
