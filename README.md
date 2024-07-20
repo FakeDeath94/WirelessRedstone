@@ -28,6 +28,7 @@ https://github.com/user-attachments/assets/50ca65b9-068c-44e6-b891-351f51e6cbf4
 
 ## ToDo
 - Add MySql Support (I know it isn't probably needed for a small plugin but it is nice to have the option)
+- Add a new sign functionality, basically allow a single transmitter sign to have multiple channels that you can go through.
 - Add Removal of all old channels (from database and yml files) when all signs are destroyed.
 
 ## Config
