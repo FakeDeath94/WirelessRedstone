@@ -13,6 +13,10 @@ The official page of the Wireless Redstone plugin. [Spigot page.](https://www.sp
 - Fixed Version check to recognize Paper 1.21-57-0e02aa5 (MC: 1.21) as a valid build.
 - Fixed most of the issues with Depreciated Bukkit API classes/functions.
 - Fixed Redstone Wire Not Working!
+- Added missing MC Versions to fix server logs stating unknow server version
+
+
+https://github.com/user-attachments/assets/169c6f80-e1b4-4f3f-9168-ff0cf0baeb88
 
 
 https://github.com/user-attachments/assets/50ca65b9-068c-44e6-b891-351f51e6cbf4
