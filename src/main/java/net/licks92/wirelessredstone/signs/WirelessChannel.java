@@ -234,41 +234,45 @@ public class WirelessChannel implements ConfigurationSerializable {
         owners = updatedOwners;
     }
 
-private UUID getUUIDFromName(String name) {
-    HttpURLConnection connection = null;
-    try {
-        connection = (HttpURLConnection) new URL("https://api.mojang.com/users/profiles/minecraft/" + name).openConnection();
-        connection.setReadTimeout(5000);
-        connection.setConnectTimeout(5000);
-        connection.setRequestMethod("GET");
-        connection.setDoOutput(true);
+    private UUID getUUIDFromName(String name) {
+        HttpURLConnection connection = null;
+        try {
+            connection = (HttpURLConnection) new URL("https://api.mojang.com/users/profiles/minecraft/" + name).openConnection();
+            connection.setReadTimeout(5000);
+            connection.setConnectTimeout(5000);
+            connection.setRequestMethod("GET");
+            connection.setDoOutput(true);
 
-        try (Scanner scanner = new Scanner(connection.getInputStream())) {
-            if (scanner.hasNext()) {
-                String response = scanner.next();
-                String id = response.split("\"id\":\"")[1].split("\"")[0];
-                return UUID.fromString(
-                    id.replaceFirst(
-                        "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
-                        "$1-$2-$3-$4-$5"
-                    )
-                );
+            try (Scanner scanner = new Scanner(connection.getInputStream())) {
+                if (scanner.hasNext()) {
+                    String response = scanner.next();
+                    String id = response.split("\"id\":\"")[1].split("\"")[0];
+                    return UUID.fromString(
+                        id.replaceFirst(
+                            "(\\w{8})(\\w{4})(\\w{4})(\\w{4})(\\w{12})",
+                            "$1-$2-$3-$4-$5"
+                        )
+                    );
+                }
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        } finally {
+            if (connection != null) {
+                connection.disconnect();
             }
         }
-    } catch (IOException e) {
-        e.printStackTrace();
-    } finally {
-        if (connection != null) {
-            connection.disconnect();
-        }
+        return null;
     }
-    return null;
-}
 
     public int getId() {
         return id;
     }
 
+    public void setLocked(boolean locked) {
+        this.locked = locked;
+    }   
+     
     public void setId(int id) {
         this.id = id;
     }
